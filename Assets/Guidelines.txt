@@ -1,0 +1,20 @@
+Guidelines:
+
+Player:
+1. Components needed:
+	PolygonCollier2D (so the bottom can be changed to prevent getting stuck)
+	Rigidbody2D Set to Kinematic, Freeze Z axis rotation
+	Player.cs Set ground layer to Ground, and tweak other settings as needed
+	Set layer to Player
+2. Setup GameObject:
+	Set layer and tag to player
+	
+
+Enemies:
+1. Components needed: 
+	BaseEnemy.cs to provide the basic stats needed
+	an enemy AI script
+	Collider of the appropriate type set to trigger
+	Rigidbody2D if you want it to be dynamic you will need to add a non-trigger collider
+2. Setup GameObject:
+	Set layer and tag to enemy

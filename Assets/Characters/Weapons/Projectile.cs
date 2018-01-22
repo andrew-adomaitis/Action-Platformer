@@ -6,10 +6,14 @@ public class Projectile : MonoBehaviour
     [SerializeField] float destroyDelay = 1f;
 
     Player player;
+    Rigidbody2D rb;
     
     void Awake()
     {
+        rb = GetComponent<Rigidbody2D>();
         player = FindObjectOfType<Player>();
+
+        rb.gravityScale = 0;
     }
 
     void OnBecameInvisible()

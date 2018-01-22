@@ -164,7 +164,7 @@ public class Player : MonoBehaviour
             print(j);
 
             bullet.transform.localRotation = new Quaternion(Quaternion.identity.x, Quaternion.identity.y, j, Quaternion.identity.w);
-            projectileRigidbody.AddRelativeForce(new Vector2(bulletSpeed, projectileRigidbody.velocity.y), ForceMode2D.Impulse);
+            projectileRigidbody.AddRelativeForce(new Vector2(bulletSpeed, projectileRigidbody.velocity.y), ForceMode2D.Force);
         }
     }
 

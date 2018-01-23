@@ -16,6 +16,11 @@ public class Projectile : MonoBehaviour
         rb.gravityScale = 0;
     }
 
+    void Update()
+    {
+        rb.AddRelativeForce(new Vector2(player.bulletSpeed, 0), ForceMode2D.Impulse);
+    }
+
     void OnBecameInvisible()
     {
         Destroy(gameObject);

@@ -69,7 +69,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1685642801614860}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.411, y: -0.14, z: 0}
+  m_LocalPosition: {x: 0.527, y: -0.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4909788457412038}
@@ -218,7 +218,7 @@ MonoBehaviour:
   damage: 10
   numOfBullets: 5
   gunEnd: {fileID: 4418523972492144}
-  bulletSpeed: 10
+  bulletSpeed: 2
   timeBetweenHits: 1
   hurtCamShakeLength: 0.15
   hurtCamShakeIntensity: 0.15

@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(HealthSystem))]
@@ -41,7 +40,7 @@ public class Player : MonoBehaviour
     public float damage = 10f;
     [SerializeField] int numOfBullets = 5;
     [SerializeField] Transform gunEnd;
-    [SerializeField] float bulletSpeed = 10f;
+    public float bulletSpeed = 10f;
     [SerializeField] float timeBetweenHits = 1f;
 
     [Header("Camera Shake")]
@@ -52,6 +51,7 @@ public class Player : MonoBehaviour
     [SerializeField] float shakeFrequency = .1f;
     
     [HideInInspector] public Vector3 respawnPos;
+    [HideInInspector] public bool isFacingRight;
     
     const string GROUNDED_BOOLEAN = "Grounded";
     const string SPEED_FLOAT = "Speed";
@@ -162,9 +162,11 @@ public class Player : MonoBehaviour
             GameObject bullet = Instantiate(bulletPrefab, gunEnd.position, Quaternion.identity);
             Rigidbody2D projectileRigidbody = bullet.GetComponent<Rigidbody2D>();
             print(j);
-
             bullet.transform.localRotation = new Quaternion(Quaternion.identity.x, Quaternion.identity.y, j, Quaternion.identity.w);
-            projectileRigidbody.AddRelativeForce(new Vector2(bulletSpeed, projectileRigidbody.velocity.y), ForceMode2D.Force);
+            if (transform.localScale.x < 0 && bulletSpeed < 0)
+                bulletSpeed *= -1;
+            else if (transform.localScale.x > 0 && bulletSpeed > 0)
+                bulletSpeed *= -1;
         }
     }
 

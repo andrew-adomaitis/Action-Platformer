@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
-
+// TODO find a way to check if all bullets have hit a single enemy. Try an array on the enemy?
 [RequireComponent(typeof(Rigidbody2D), typeof(HealthSystem))]
 public class Player : MonoBehaviour
 {
@@ -51,7 +51,6 @@ public class Player : MonoBehaviour
     [SerializeField] float shakeFrequency = .1f;
     
     [HideInInspector] public Vector3 respawnPos;
-    [HideInInspector] public bool isFacingRight;
     
     const string GROUNDED_BOOLEAN = "Grounded";
     const string SPEED_FLOAT = "Speed";
@@ -81,12 +80,9 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (invincibilityLength <= Mathf.Epsilon) // If the player is not getting knocked back allow movement
-        {
-            HandleMovement();
-        }
+        HandleMovement();
 
-        if (invincibilityLength > Mathf.Epsilon) // Knockback the character
+        if (invincibilityLength > Mathf.Epsilon)
         {
             invincibilityLength -= Time.deltaTime;
 
@@ -155,7 +151,7 @@ public class Player : MonoBehaviour
     }
 
     void ShootWeapon()
-    {         
+    {        
         for (float j = -bulletSpreadAngle; j < bulletSpreadAngle; j += bulletSpreadAngle / numOfBullets * 2)
         {
             GameObject bullet = Instantiate(bulletPrefab, gunEnd.position, Quaternion.identity);
@@ -167,6 +163,7 @@ public class Player : MonoBehaviour
             else if (transform.localScale.x > 0 && bulletSpeed > 0)
                 bulletSpeed *= -1;
         }
+        StartCoroutine(CountDownTimeBetweenHits());
     }
 
     void FindComponents()

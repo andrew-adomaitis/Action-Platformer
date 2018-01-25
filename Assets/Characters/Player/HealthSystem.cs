@@ -55,19 +55,6 @@ public class HealthSystem : MonoBehaviour
         healthText.text = currentHP + " / " + maxHP;
     }
 
-    //public void Knockback(float strengthY, float strengthX, float invincibilityLength)
-    //{
-        
-    //    if (transform.localScale.x >= 0f)
-    //    {
-    //        rigidBody.velocity = new Vector2(-strengthX, strengthY);
-    //    }
-    //    else
-    //    {
-    //        rigidBody.velocity = new Vector2(strengthX, strengthY);
-    //    }
-    //}
-
     void ShakeCamPlayerParams()
     {
         cameraShake.Shake(player.hurtCamShakeIntensity, player.hurtCamShakeLength, .1f);

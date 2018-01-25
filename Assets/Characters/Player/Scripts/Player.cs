@@ -208,11 +208,6 @@ public class Player : MonoBehaviour
             enemy = other.gameObject.GetComponent<BaseEnemy>(); // Find the enemy
             healthSystem.TakeDamage(enemy.damage); // Damage the player
             cameraShake.Shake(hurtCamShakeIntensity, hurtCamShakeLength, shakeFrequency); // Shake the camera
-            //healthSystem.Knockback ( // Knockback the player
-            //    hurtKnockbackForceHeight, 
-            //    hurtKnockbackForceLengthwise, 
-            //    hurtKnockbackLength
-            //);
         }
         else if(other.tag == "Hazard" && invincibilityLength <= Mathf.Epsilon) // If the player collides with a hazard
         {
@@ -220,11 +215,6 @@ public class Player : MonoBehaviour
             Hazard hazard = other.gameObject.GetComponent<Hazard>(); // Find the hazard
             healthSystem.TakeDamage(hazard.damage); // Damage the player
             cameraShake.Shake(hurtCamShakeIntensity, hurtCamShakeLength, shakeFrequency); // Shake the camera
-            //healthSystem.Knockback ( // Knockback the player
-            //    hurtKnockbackForceHeight, 
-            //    hurtKnockbackForceLengthwise,
-            //    hurtKnockbackLength
-            //);
         }
      }
 }

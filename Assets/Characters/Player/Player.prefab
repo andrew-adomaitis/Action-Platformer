@@ -82,7 +82,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1393470570252450}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.3368325, y: 0.7072243, z: 0}
+  m_LocalPosition: {x: 1.22, y: 1.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4933693522681606}
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 5
-  jumpForce: 5
+  jumpForce: 6.3
   fallMultiplier: 2.3
   lowJumpMultiplier: 3
   groundCheck: {fileID: 4933693522681606}
@@ -224,6 +224,7 @@ MonoBehaviour:
   hurtCamShakeIntensity: 0.15
   shakeFrequency: 0.01
   respawnPos: {x: -2.1331, y: 0.8444859, z: -0.023438}
+  isFacingRight: 0
 --- !u!212 &212459664105535994
 SpriteRenderer:
   m_ObjectHideFlags: 1

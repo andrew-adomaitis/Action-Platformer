@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
         player = FindObjectOfType<Player>();
         objectsToReset = FindObjectsOfType<ResetOnRespawn>();
         playerHealthSystem = player.gameObject.GetComponent<HealthSystem>();
+        cameraRig = FindObjectOfType<CameraRig>();
     }
 
     public void Respawn()
@@ -22,20 +23,24 @@ public class GameController : MonoBehaviour
         StartCoroutine("RespawnCo");
     }
 
-    public void RespawnNoDelay()
-    {
-        player.gameObject.SetActive(false);
-        player.transform.position = player.respawnPos;
-        player.gameObject.SetActive(true);
-    }
+    //public void RespawnNoDelay()
+    //{
+    //    player.gameObject.SetActive(false);
+    //    player.transform.position = player.respawnPos;
+    //    player.gameObject.SetActive(true);
+    //}
 
     IEnumerator RespawnCo()
     {
-        player.gameObject.SetActive(false);
-        yield return new WaitForSeconds(waitToRespawn);
-        playerHealthSystem.currentHP = playerHealthSystem.maxHP;
-        playerHealthSystem.SetText();
-        player.transform.position = player.respawnPos;
-        player.gameObject.SetActive(true);
+        player.canMove = false; // Stop the player from controlling the character
+        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero; // Reset the player's velocity
+        yield return new WaitForSeconds(waitToRespawn); // Wait for a while for the player to realize that they've died
+        playerHealthSystem.currentHP = playerHealthSystem.maxHP; // Reset the player's health
+        playerHealthSystem.SetText(); // Reset the player's health text
+        // Reset the player's velocity. Necessary to do twice to stop the player from falling
+        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        player.transform.position = player.respawnPos; // Reset the player's position
+        cameraRig.ResetXPos(); // Reset the camera position
+        player.canMove = true; // Allow the player to move again
     }
 }

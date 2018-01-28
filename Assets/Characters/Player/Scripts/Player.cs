@@ -54,6 +54,7 @@ public class Player : MonoBehaviour
     [SerializeField] float shakeFrequency = .1f;
     
     [HideInInspector] public Vector3 respawnPos;
+    [HideInInspector] public bool canMove = true;
     
     const string GROUNDED_BOOLEAN = "Grounded";
     const string SPEED_FLOAT = "Speed";
@@ -67,12 +68,13 @@ public class Player : MonoBehaviour
     HealthSystem healthSystem;
     BaseEnemy enemy;
     CameraShake cameraShake;
+    CameraRig mainCameraScript;
 
     float invincibilityLength;
     float originalTimeForHits;
     float originalGravityScale;
     bool canAttack = true;
-    
+        
     void Start()
     {
         originalTimeForHits = timeBetweenHits;
@@ -83,7 +85,10 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        HandleMovement();
+        if (canMove)
+        {
+            HandleMovement();
+        }
 
         if (invincibilityLength > Mathf.Epsilon)
         {
@@ -157,10 +162,11 @@ public class Player : MonoBehaviour
     {        
         for (float j = -bulletSpreadAngle; j < bulletSpreadAngle; j += bulletSpreadAngle / numOfBullets * 2)
         {
-            GameObject bullet = Instantiate(bulletPrefab, gunEnd.position, Quaternion.identity);
-            Rigidbody2D projectileRigidbody = bullet.GetComponent<Rigidbody2D>();
-            print(j);
+            GameObject bullet = Instantiate(bulletPrefab, gunEnd.position, Quaternion.identity); // Instantiate a bullet
+            Rigidbody2D projectileRigidbody = bullet.GetComponent<Rigidbody2D>(); // Get the bullet's Rigidbody
             bullet.transform.localRotation = new Quaternion(Quaternion.identity.x, Quaternion.identity.y, j, Quaternion.identity.w);
+
+            // Check for which direction the player's facing and fire the bullets accordingly
             if (transform.localScale.x < 0 && bulletSpeed < 0)
                 bulletSpeed *= -1;
             else if (transform.localScale.x > 0 && bulletSpeed > 0)
@@ -171,6 +177,7 @@ public class Player : MonoBehaviour
 
     void FindComponents()
     {
+        mainCameraScript = FindObjectOfType<CameraRig>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         gameController = FindObjectOfType<GameController>();
@@ -179,7 +186,7 @@ public class Player : MonoBehaviour
         playerCollider = GetComponent<Collider2D>();
     }
 
-    IEnumerator CountDownTimeBetweenHits()
+    public IEnumerator CountDownTimeBetweenHits()
     {
         reloadProgressImage.fillAmount = 0;
         canAttack = false;
@@ -227,4 +234,12 @@ public class Player : MonoBehaviour
             cameraShake.Shake(hurtCamShakeIntensity, hurtCamShakeLength, shakeFrequency); // Shake the camera
         }
      }
+
+    void OnBecameInvisible()
+    {
+        if (transform.position.y > mainCameraScript.transform.position.y)
+        {
+            mainCameraScript.ResetXPos();
+        }
+    }
 }

@@ -8,7 +8,7 @@ public class BaseEnemy : MonoBehaviour
 
     Player player;
     HealthSystem playerHS;
-    int amountOfBulletsHit;
+    int amountOfBulletsHit; // Number of bullets hit
 
     void Awake()
     {
@@ -24,6 +24,8 @@ public class BaseEnemy : MonoBehaviour
     IEnumerator WaitToResetDamageCount()
     {
         yield return new WaitForSeconds(.5f);
-
+        amountOfBulletsHit = 0; // Reset the amount of bullets hit
     }
+
+    
 }

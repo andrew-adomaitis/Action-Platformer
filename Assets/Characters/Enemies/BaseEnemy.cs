@@ -1,19 +1,29 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(HealthSystem))]
 public class BaseEnemy : MonoBehaviour
 {
     public float damage = 10f;
 
-    HealthSystem player;
+    Player player;
+    HealthSystem playerHS;
+    int amountOfBulletsHit;
 
     void Awake()
     {
-        player = FindObjectOfType<Player>().GetComponent<HealthSystem>();
+        player = FindObjectOfType<Player>();
+        playerHS = player.GetComponent<HealthSystem>();
     }
 
     public void DamagePlayer(float amount)
     {
-        player.TakeDamage(damage);
+        playerHS.TakeDamage(damage);
+    }
+
+    IEnumerator WaitToResetDamageCount()
+    {
+        yield return new WaitForSeconds(.5f);
+
     }
 }

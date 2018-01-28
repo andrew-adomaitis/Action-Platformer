@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 // TODO find a way to check if all bullets have hit a single enemy. Try an array on the enemy?
 [RequireComponent(typeof(Rigidbody2D), typeof(HealthSystem))]
 public class Player : MonoBehaviour
@@ -33,7 +34,9 @@ public class Player : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
 
     [Header("Attacking")]
-    [SerializeField] GameObject bulletHolder; // Bullet spread angle is 45 degrees
+    [Tooltip("The image that will show how close the gun is to being able to shoot again")]
+    [SerializeField] Image reloadProgressImage;
+    [SerializeField] GameObject bulletHolder;
     [SerializeField] GameObject bulletPrefab;
     [Tooltip("How much of an angle do shoot the bullets in")]
     [SerializeField] float bulletSpreadAngle = 45;
@@ -42,7 +45,7 @@ public class Player : MonoBehaviour
     [SerializeField] Transform gunEnd;
     public float bulletSpeed = 10f;
     [SerializeField] float timeBetweenHits = 1f;
-
+    
     [Header("Camera Shake")]
     [Tooltip("How long to shake the camera when the player gets hurt")]
     public float hurtCamShakeLength = .1f;
@@ -178,9 +181,19 @@ public class Player : MonoBehaviour
 
     IEnumerator CountDownTimeBetweenHits()
     {
+        reloadProgressImage.fillAmount = 0;
         canAttack = false;
-        yield return new WaitForSecondsRealtime(timeBetweenHits);
+        while (timeBetweenHits > Mathf.Epsilon)
+        {
+            reloadProgressImage.gameObject.SetActive(true);
+            timeBetweenHits -= Time.deltaTime;
+            reloadProgressImage.fillAmount += Time.deltaTime;
+
+            yield return new WaitForEndOfFrame();
+        }
         canAttack = true;
+        reloadProgressImage.gameObject.SetActive(false);
+        timeBetweenHits = originalTimeForHits;
     }
     
     void OnDrawGizmos()

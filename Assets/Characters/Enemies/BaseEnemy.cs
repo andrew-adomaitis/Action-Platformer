@@ -6,10 +6,11 @@ public class BaseEnemy : MonoBehaviour
 {
     public float damage = 10f;
 
+    [HideInInspector] public int amountOfBulletsHit; // Number of bullets hit
+
     Player player;
     HealthSystem playerHS;
-    int amountOfBulletsHit; // Number of bullets hit
-
+    
     void Awake()
     {
         player = FindObjectOfType<Player>();
@@ -26,6 +27,4 @@ public class BaseEnemy : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         amountOfBulletsHit = 0; // Reset the amount of bullets hit
     }
-
-    
 }

@@ -3,6 +3,7 @@
 public class CameraRig : MonoBehaviour
 {
     public Transform target;
+    [SerializeField] float followSpeed = 10f;
     [SerializeField] float yOffsetFromTarget = 5;
     
     void Start()
@@ -16,7 +17,7 @@ public class CameraRig : MonoBehaviour
 
     void Update()
     {
-        transform.position = new Vector3(target.position.x, transform.position.y, transform.position.z);
+        transform.position = Vector2.Lerp(transform.position, target.position, followSpeed * Time.deltaTime);
     }
 
     public void ResetXPos()

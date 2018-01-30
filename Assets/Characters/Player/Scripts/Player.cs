@@ -6,12 +6,13 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     [Header("Movement")]
-    [Range(1, 10)][SerializeField] float maxSpeed = 5f;
-    [Range(1, 10)][SerializeField] float jumpForce = 5f;
+    [Range(1, 10)][SerializeField] float maxSpeed = 5;
+    [Range(1, 10)][SerializeField] float jumpForce = 5;
+    [SerializeField] float invincibilityTime = .1f;
 
     [Header("Jumping")]
     [Tooltip("Multiplies how fast the player falls for better feel")]
-    [SerializeField] float fallMultiplier = 2f;
+    [SerializeField] float fallMultiplier = 2;
     [Tooltip("How high a low jump is")]
     [SerializeField] float lowJumpMultiplier = 1.5f;
     [Tooltip("A empty child that will be placed at the player's feet")]
@@ -19,18 +20,6 @@ public class Player : MonoBehaviour
     [Tooltip("How far to check for the ground")]
     [SerializeField] float groundCheckRadius = .2f;
     [SerializeField] bool isGrounded = true;
-
-    [Header("Knockback")]
-    [Tooltip("How far to knock the player along the X axis")]
-    public float hurtKnockbackForceLengthwise = 5f;
-    [Tooltip("How far to knock the player along the Y axis")]
-    public float hurtKnockbackForceHeight = 2f;
-    [Tooltip("How long the knockback lasts")]
-    public float hurtKnockbackLength = .1f;
-    [Tooltip("How long the player will be invincible for")]
-    [SerializeField] float invincibilityTime = 1f;
-
-    [Header("Layers/Tags")]
     [SerializeField] LayerMask groundLayer;
 
     [Header("Attacking")]
@@ -40,11 +29,12 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     [Tooltip("How much of an angle do shoot the bullets in")]
     [SerializeField] float bulletSpreadAngle = 45;
-    public float damage = 10f;
+    public float damage = 10;
     [SerializeField] int numOfBullets = 5;
     [SerializeField] Transform gunEnd;
-    public float bulletSpeed = 10f;
-    [SerializeField] float timeBetweenHits = 1f;
+    public float bulletSpeed = 10;
+    [SerializeField] float timeBetweenHits = 1;
+    [SerializeField] int maxBullets = 10;
     
     [Header("Camera Shake")]
     [Tooltip("How long to shake the camera when the player gets hurt")]
@@ -70,6 +60,7 @@ public class Player : MonoBehaviour
     CameraShake cameraShake;
     CameraRig mainCameraScript;
 
+    int currentBullets;
     float invincibilityLength;
     float originalTimeForHits;
     float originalGravityScale;
@@ -77,6 +68,7 @@ public class Player : MonoBehaviour
         
     void Start()
     {
+        currentBullets = maxBullets;
         originalTimeForHits = timeBetweenHits;
         respawnPos = transform.position;
         FindComponents();
@@ -172,6 +164,9 @@ public class Player : MonoBehaviour
             else if (transform.localScale.x > 0 && bulletSpeed > 0)
                 bulletSpeed *= -1;
         }
+        currentBullets--;
+        if (currentBullets <= 1)
+            canAttack = false;
         StartCoroutine(CountDownTimeBetweenHits());
     }
 

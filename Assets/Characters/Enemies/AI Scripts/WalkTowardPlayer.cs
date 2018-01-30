@@ -2,10 +2,10 @@
 
 public class WalkTowardPlayer : MonoBehaviour
 {
-    [SerializeField] float chaseRadius = 3f;
     [SerializeField] float speed = 4f;
 
     Transform player;
+    bool canChase = false;
 
     void Start()
     {
@@ -14,8 +14,7 @@ public class WalkTowardPlayer : MonoBehaviour
     
     void Update()
     {
-        float distanceToTarget = Vector2.Distance(transform.position, player.position);
-        if(distanceToTarget <= chaseRadius)
+        if(canChase)
         {
             transform.position = Vector3.MoveTowards (
                 transform.position, 
@@ -25,9 +24,13 @@ public class WalkTowardPlayer : MonoBehaviour
         }
     }
 
-    void OnDrawGizmos()
+    void OnBecameVisible()
     {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, chaseRadius);
+        canChase = true;
+    }
+
+    void OnBecameInvisible()
+    {
+        canChase = false;
     }
 }

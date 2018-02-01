@@ -4,19 +4,21 @@ using System.Collections;
 [RequireComponent(typeof(HealthSystem))]
 public class BaseEnemy : MonoBehaviour
 {
-    public float damage = 10f;
+    public int damage = 10;
+    [SerializeField] string projectileTag = "Projectile";
 
-    [HideInInspector] public int amountOfBulletsHit; // Number of bullets hit
+    [HideInInspector] public int damageTaken; // Number of bullets hit
 
     Player player;
     HealthSystem playerHS;
+    bool isDamageReseting = false;
     
     void Awake()
     {
         player = FindObjectOfType<Player>();
         playerHS = player.GetComponent<HealthSystem>();
     }
-
+    
     public void DamagePlayer(float amount)
     {
         playerHS.TakeDamage(damage);
@@ -24,7 +26,21 @@ public class BaseEnemy : MonoBehaviour
 
     IEnumerator WaitToResetDamageCount()
     {
+        isDamageReseting = true;
         yield return new WaitForSeconds(.5f);
-        amountOfBulletsHit = 0; // Reset the amount of bullets hit
+        damageTaken = 0; // Reset the amount of bullets hit
+        isDamageReseting = false;
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == projectileTag)
+        {
+            damageTaken += player.damage;
+            if (damageTaken >= player.damage * player.numOfBullets)
+                player.ActivateConditionOnEnemy();
+            if(!isDamageReseting)
+                StartCoroutine(WaitToResetDamageCount());
+        }
     }
 }

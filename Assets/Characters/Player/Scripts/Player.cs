@@ -30,8 +30,8 @@ public class Player : MonoBehaviour
     [SerializeField] GameObject bulletPrefab;
     [Tooltip("How much of an angle do shoot the bullets in")]
     [SerializeField] float bulletSpreadAngle = 45;
-    public float damage = 10;
-    [SerializeField] int numOfBullets = 5;
+    public int damage = 10;
+    public int numOfBullets = 5;
     [SerializeField] Transform gunEnd;
     public float bulletSpeed = 10;
     [SerializeField] float timeBetweenHits = 1;
@@ -94,6 +94,29 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         HandleLowHighJump();
+    }
+
+    public void ActivateConditionOnEnemy()
+    {
+        print("enemy condition activated");
+    }
+
+    public IEnumerator CountDownTimeBetweenHits()
+    {
+        reloadProgressImage.fillAmount = 0;
+        canAttack = false;
+        while (timeBetweenHits > Mathf.Epsilon)
+        {
+            reloadProgressImage.gameObject.SetActive(true);
+            timeBetweenHits -= Time.deltaTime;
+            reloadProgressImage.fillAmount += Time.deltaTime;
+
+            yield return new WaitForEndOfFrame();
+        }
+        if (currentBullets >= 1)
+            canAttack = true;
+        reloadProgressImage.gameObject.SetActive(false);
+        timeBetweenHits = originalTimeForHits;
     }
 
     void HandleLowHighJump()
@@ -173,7 +196,6 @@ public class Player : MonoBehaviour
         if (currentBullets < 1)
             canAttack = false;
         bulletText.text = "bullets: " + currentBullets;
-        print(canAttack);
         StartCoroutine(CountDownTimeBetweenHits());
     }
 
@@ -188,22 +210,7 @@ public class Player : MonoBehaviour
         playerCollider = GetComponent<Collider2D>();
     }
 
-    public IEnumerator CountDownTimeBetweenHits()
-    {
-        reloadProgressImage.fillAmount = 0;
-        canAttack = false;
-        while (timeBetweenHits > Mathf.Epsilon)
-        {
-            reloadProgressImage.gameObject.SetActive(true);
-            timeBetweenHits -= Time.deltaTime;
-            reloadProgressImage.fillAmount += Time.deltaTime;
-
-            yield return new WaitForEndOfFrame();
-        }
-        canAttack = true;
-        reloadProgressImage.gameObject.SetActive(false);
-        timeBetweenHits = originalTimeForHits;
-    }
+    
     
     void OnDrawGizmos()
     {

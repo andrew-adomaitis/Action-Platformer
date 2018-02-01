@@ -140,10 +140,13 @@ public class Player : MonoBehaviour
             anim.SetFloat(SPEED_FLOAT, 0);
         }
         // Attack
-        if (Input.GetKeyDown(KeyCode.Space) && canAttack)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            anim.SetTrigger(ATTACK_TRIGGER);
-            ShootWeapon();
+            if (canAttack)
+            {
+                anim.SetTrigger(ATTACK_TRIGGER);
+                ShootWeapon();
+            }
         }
         // Jump
         if (Input.GetButtonDown("Jump") && isGrounded)
@@ -167,9 +170,10 @@ public class Player : MonoBehaviour
                 bulletSpeed *= -1;
         }
         currentBullets--;
-        bulletText.text = "bullets: " + currentBullets;
-        if (currentBullets <= 1)
+        if (currentBullets < 1)
             canAttack = false;
+        bulletText.text = "bullets: " + currentBullets;
+        print(canAttack);
         StartCoroutine(CountDownTimeBetweenHits());
     }
 

@@ -18,17 +18,18 @@ public class GameController : MonoBehaviour
         cameraRig = FindObjectOfType<CameraRig>();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+    }
+
     public void Respawn()
     {
         StartCoroutine("RespawnCo");
     }
-
-    //public void RespawnNoDelay()
-    //{
-    //    player.gameObject.SetActive(false);
-    //    player.transform.position = player.respawnPos;
-    //    player.gameObject.SetActive(true);
-    //}
 
     IEnumerator RespawnCo()
     {

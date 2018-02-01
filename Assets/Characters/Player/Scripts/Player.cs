@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     [Header("Attacking")]
     [Tooltip("The image that will show how close the gun is to being able to shoot again")]
     [SerializeField] Image reloadProgressImage;
+    [SerializeField] Text bulletText;
     [SerializeField] GameObject bulletHolder;
     [SerializeField] GameObject bulletPrefab;
     [Tooltip("How much of an angle do shoot the bullets in")]
@@ -60,7 +61,7 @@ public class Player : MonoBehaviour
     CameraShake cameraShake;
     CameraRig mainCameraScript;
 
-    int currentBullets;
+    float currentBullets;
     float invincibilityLength;
     float originalTimeForHits;
     float originalGravityScale;
@@ -69,6 +70,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         currentBullets = maxBullets;
+        bulletText.text = "bullets: " + currentBullets;
         originalTimeForHits = timeBetweenHits;
         respawnPos = transform.position;
         FindComponents();
@@ -165,6 +167,7 @@ public class Player : MonoBehaviour
                 bulletSpeed *= -1;
         }
         currentBullets--;
+        bulletText.text = "bullets: " + currentBullets;
         if (currentBullets <= 1)
             canAttack = false;
         StartCoroutine(CountDownTimeBetweenHits());

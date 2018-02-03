@@ -221,7 +221,7 @@ public class Player : MonoBehaviour
         Gizmos.DrawWireSphere(gunEnd.position, .05f);
         
     }
-    
+    // TODO fix double damage on snail enemy, caused by two colliders on snail
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Killzone")
@@ -243,6 +243,18 @@ public class Player : MonoBehaviour
             cameraShake.Shake(hurtCamShakeIntensity, hurtCamShakeLength, shakeFrequency); // Shake the camera
         }
      }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.collider.tag == "Enemy" && invincibilityLength <= Mathf.Epsilon) // If the player collides with an enemy
+        {
+            invincibilityLength = invincibilityTime;
+            enemy = other.gameObject.GetComponent<BaseEnemy>(); // Find the enemy
+            healthSystem.TakeDamage(enemy.damage); // Damage the player
+            cameraShake.Shake(hurtCamShakeIntensity, hurtCamShakeLength, shakeFrequency); // Shake the camera
+                                                                                          //}
+        }
+    }
 
     void OnBecameInvisible()
     {

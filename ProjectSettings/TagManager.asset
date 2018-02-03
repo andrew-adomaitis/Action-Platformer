@@ -8,6 +8,7 @@ TagManager:
   - Hazard
   - Weapon
   - Enemy
+  - Projectile
   layers:
   - Default
   - TransparentFX

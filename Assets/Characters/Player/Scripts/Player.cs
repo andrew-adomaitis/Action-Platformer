@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Player : MonoBehaviour
 {
     [Header("Movement")]
-    [Range(1, 10)][SerializeField] float maxSpeed = 5;
+    [Range(1, 10)] public float speed = 5;
     [Range(1, 10)][SerializeField] float jumpForce = 5;
     [SerializeField] float invincibilityTime = .1f;
 
@@ -147,14 +147,14 @@ public class Player : MonoBehaviour
         {
             anim.SetFloat(SPEED_FLOAT, 2f);
             transform.localScale = new Vector2(1, 1);
-            rb.velocity = new Vector2(maxSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(speed, rb.velocity.y);
         }
         // Move left
         else if (Input.GetAxisRaw("Horizontal") < 0)
         {
             anim.SetFloat(SPEED_FLOAT, 2f);
             transform.localScale = new Vector2(-1, 1);
-            rb.velocity = new Vector2(-maxSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(-speed, rb.velocity.y);
         }
         // No movement
         else if (Input.GetAxisRaw("Horizontal") == 0)

@@ -185,6 +185,7 @@ public class Player : MonoBehaviour
             GameObject bullet = Instantiate(bulletPrefab, gunEnd.position, Quaternion.identity); // Instantiate a bullet
             Rigidbody2D projectileRigidbody = bullet.GetComponent<Rigidbody2D>(); // Get the bullet's Rigidbody
             bullet.transform.localRotation = new Quaternion(Quaternion.identity.x, Quaternion.identity.y, j, Quaternion.identity.w);
+            bullet.transform.localScale = new Vector2(-transform.localScale.x * .5f, bullet.transform.localScale.y);
 
             // Check for which direction the player's facing and fire the bullets accordingly
             if (transform.localScale.x < 0 && bulletSpeed < 0)
@@ -221,14 +222,10 @@ public class Player : MonoBehaviour
         Gizmos.DrawWireSphere(gunEnd.position, .05f);
         
     }
-    // TODO fix double damage on snail enemy, caused by two colliders on snail
+    
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Killzone")
-        {
-            gameController.Respawn();
-        }
-        else if (other.tag == "Enemy" && invincibilityLength <= Mathf.Epsilon) // If the player collides with an enemy
+        if (other.tag == "Enemy" && invincibilityLength <= Mathf.Epsilon) // If the player collides with an enemy
         {
             invincibilityLength = invincibilityTime;
             enemy = other.gameObject.GetComponent<BaseEnemy>(); // Find the enemy
@@ -242,7 +239,7 @@ public class Player : MonoBehaviour
             healthSystem.TakeDamage(hazard.damage); // Damage the player
             cameraShake.Shake(hurtCamShakeIntensity, hurtCamShakeLength, shakeFrequency); // Shake the camera
         }
-     }
+    }
 
     void OnCollisionEnter2D(Collision2D other)
     {
@@ -252,7 +249,6 @@ public class Player : MonoBehaviour
             enemy = other.gameObject.GetComponent<BaseEnemy>(); // Find the enemy
             healthSystem.TakeDamage(enemy.damage); // Damage the player
             cameraShake.Shake(hurtCamShakeIntensity, hurtCamShakeLength, shakeFrequency); // Shake the camera
-                                                                                          //}
         }
     }
 

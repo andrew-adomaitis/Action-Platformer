@@ -6,9 +6,11 @@ public class ChasePlayerInRadiusFly : MonoBehaviour
 
     bool canChase = false;
     Player target;
+    Rigidbody2D rb;
     
     void Start()
     {
+        rb = GetComponent<Rigidbody2D>();
         target = FindObjectOfType<Player>();
     }
 

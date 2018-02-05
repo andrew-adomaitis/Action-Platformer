@@ -8,6 +8,7 @@ public class BaseEnemy : MonoBehaviour
     [SerializeField] string projectileTag = "Projectile";
 
     [HideInInspector] public int damageTaken; // Number of bullets hit
+    [HideInInspector] public bool hasBeenShot = false;
 
     Player player;
     HealthSystem playerHS;
@@ -30,12 +31,14 @@ public class BaseEnemy : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         damageTaken = 0; // Reset the amount of bullets hit
         isDamageReseting = false;
+        hasBeenShot = false;
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if(other.tag == projectileTag)
         {
+            hasBeenShot = true;
             damageTaken += player.damage;
             if (damageTaken >= player.damage * player.numOfBullets)
                 player.ActivateConditionOnEnemy();

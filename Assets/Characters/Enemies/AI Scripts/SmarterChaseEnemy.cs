@@ -6,8 +6,10 @@ public class SmarterChaseEnemy : MonoBehaviour
     [SerializeField] float speed = 3;
     [SerializeField] float chargeSpeed = 6;
     [SerializeField] Transform wallCheck;
+    [SerializeField] Transform playerChargeCheck;
 
     bool canChase = false;
+    bool shouldCharge = false;
     Transform player;
     BaseEnemy baseEnemy;
 
@@ -23,15 +25,19 @@ public class SmarterChaseEnemy : MonoBehaviour
 
         if (canChase)
         {
-            if(distanceToPlayer <= backupRadius && baseEnemy.hasBeenShot)
+            if (baseEnemy.hasBeenShot)
+            {
+                shouldCharge = true;
+            }
+            if(distanceToPlayer <= backupRadius && shouldCharge) // Charge
             {
                 transform.position = Vector3.MoveTowards(
                     transform.position,
-                    new Vector3(player.position.x, transform.position.y, transform.position.z),
+                    new Vector3(playerChargeCheck.position.x, transform.position.y, transform.position.z),
                     chargeSpeed * Time.deltaTime
                 );
             }
-            if(distanceToPlayer <= backupRadius)
+            if(distanceToPlayer <= backupRadius) // Move to Player
             {
                 transform.position = Vector3.MoveTowards(
                     transform.position,
@@ -42,7 +48,7 @@ public class SmarterChaseEnemy : MonoBehaviour
 
             else
             {
-                transform.position = Vector3.MoveTowards(
+                transform.position = Vector3.MoveTowards( // Backup
                     transform.position,
                     new Vector3(player.position.x, transform.position.y, transform.position.z),
                     speed * Time.deltaTime

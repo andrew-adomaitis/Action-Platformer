@@ -223,7 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backupRadius: 3
   speed: 3
-  chargeSpeed: 6
+  chargeSpeed: 12
   wallCheck: {fileID: 4154960860285136}
   playerChargeCheck: {fileID: 4623274863180778}
 --- !u!114 &114288353608415652
@@ -413,7 +413,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.00000029057, y: 0.48}
-  m_SizeDelta: {x: 102.781, y: 31.016}
+  m_SizeDelta: {x: 102.781, y: 31.48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224805791378149414
 RectTransform:

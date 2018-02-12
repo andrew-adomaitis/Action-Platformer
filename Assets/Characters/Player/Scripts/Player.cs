@@ -31,6 +31,8 @@ public class Player : MonoBehaviour
     [Tooltip("How much of an angle do shoot the bullets in")]
     [SerializeField] float bulletSpreadAngle = 45;
     public int damage = 10;
+
+    [Space]
     public int numOfBullets = 5;
     [SerializeField] Transform gunEnd;
     public float bulletSpeed = 10;
@@ -60,7 +62,9 @@ public class Player : MonoBehaviour
     BaseEnemy enemy;
     CameraShake cameraShake;
     CameraRig mainCameraScript;
+    Vector2 localScaleValues;
 
+    float localScaleX;
     float currentBullets;
     float invincibilityLength;
     float originalTimeForHits;
@@ -69,6 +73,9 @@ public class Player : MonoBehaviour
         
     void Start()
     {
+        localScaleValues.x = transform.localScale.x;
+        localScaleValues.y = transform.localScale.y;
+
         currentBullets = maxBullets;
         bulletText.text = "bullets: " + currentBullets;
         originalTimeForHits = timeBetweenHits;
@@ -146,14 +153,14 @@ public class Player : MonoBehaviour
         if (Input.GetAxisRaw("Horizontal") > 0)
         {
             anim.SetFloat(SPEED_FLOAT, 2f);
-            transform.localScale = new Vector2(1, 1);
+            transform.localScale = new Vector2(localScaleValues.x, localScaleValues.y);
             rb.velocity = new Vector2(speed, rb.velocity.y);
         }
         // Move left
         else if (Input.GetAxisRaw("Horizontal") < 0)
         {
             anim.SetFloat(SPEED_FLOAT, 2f);
-            transform.localScale = new Vector2(-1, 1);
+            transform.localScale = new Vector2(-localScaleValues.x, localScaleValues.y);
             rb.velocity = new Vector2(-speed, rb.velocity.y);
         }
         // No movement
@@ -256,7 +263,7 @@ public class Player : MonoBehaviour
     {
         if (transform.position.y > mainCameraScript.transform.position.y)
         {
-            mainCameraScript.ResetXPos();
+            //mainCameraScript.ResetXPos();
         }
     }
 }

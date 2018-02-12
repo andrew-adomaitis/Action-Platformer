@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 114302092623954436}
   - component: {fileID: 114800464229101012}
   - component: {fileID: 58841943034935714}
+  - component: {fileID: 114884060893606616}
   m_Layer: 9
   m_Name: Chasing Enemy
   m_TagString: Enemy
@@ -74,8 +75,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1183997497649332}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 35.15, y: 7.803, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 41.505, y: 9.8949995, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 224773927625533174}
   m_Father: {fileID: 0}
@@ -95,7 +96,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -196,6 +197,21 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114884060893606616
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1183997497649332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185eeaa2cb0bcb24f9e25f8cfcaf89cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
+  projectileTag: Projectile
+  damageTaken: 0
+  hasBeenShot: 0
 --- !u!114 &114897365329184520
 MonoBehaviour:
   m_ObjectHideFlags: 1

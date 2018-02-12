@@ -41,7 +41,6 @@ public class GameController : MonoBehaviour
         // Reset the player's velocity. Necessary to do twice to stop the player from falling
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         player.transform.position = player.respawnPos; // Reset the player's position
-        cameraRig.ResetXPos(); // Reset the camera position
         player.canMove = true; // Allow the player to move again
     }
 }

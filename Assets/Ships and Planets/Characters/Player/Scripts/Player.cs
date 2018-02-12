@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 // TODO find a way to check if all bullets have hit a single enemy. Try an array on the enemy?
-[RequireComponent(typeof(Rigidbody2D), typeof(HealthSystem))]
+[RequireComponent(typeof(Rigidbody2D), typeof(HealthSystem), typeof(AudioSource))]
 public class Player : MonoBehaviour
 {
     [Header("Movement")]
@@ -23,6 +23,7 @@ public class Player : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
 
     [Header("Attacking")]
+    [SerializeField] AudioClip[] gunSounds;
     [Tooltip("The image that will show how close the gun is to being able to shoot again")]
     [SerializeField] Image reloadProgressImage;
     [SerializeField] Text bulletText;
@@ -63,6 +64,7 @@ public class Player : MonoBehaviour
     CameraShake cameraShake;
     CameraRig mainCameraScript;
     Vector2 localScaleValues;
+    AudioSource audioSource;
 
     float localScaleX;
     float currentBullets;
@@ -192,7 +194,7 @@ public class Player : MonoBehaviour
             GameObject bullet = Instantiate(bulletPrefab, gunEnd.position, Quaternion.identity); // Instantiate a bullet
             Rigidbody2D projectileRigidbody = bullet.GetComponent<Rigidbody2D>(); // Get the bullet's Rigidbody
             bullet.transform.localRotation = new Quaternion(Quaternion.identity.x, Quaternion.identity.y, j, Quaternion.identity.w);
-            bullet.transform.localScale = new Vector2(-transform.localScale.x * .5f, bullet.transform.localScale.y);
+            bullet.transform.localScale = new Vector2(-localScaleValues.x * .5f, localScaleValues.x * .7f);
 
             // Check for which direction the player's facing and fire the bullets accordingly
             if (transform.localScale.x < 0 && bulletSpeed < 0)
@@ -209,6 +211,7 @@ public class Player : MonoBehaviour
 
     void FindComponents()
     {
+        audioSource = GetComponent<AudioSource>();
         mainCameraScript = FindObjectOfType<CameraRig>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();

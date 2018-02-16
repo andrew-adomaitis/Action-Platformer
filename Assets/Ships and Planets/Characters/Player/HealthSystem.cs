@@ -6,7 +6,7 @@ public class HealthSystem : MonoBehaviour
 {
 
     public float maxHP = 100f;
-    [SerializeField] Text healthText;
+    public Text healthText;
         
     [HideInInspector] public bool isKnockedBack = false;
     [HideInInspector] public float knockbackCounter;

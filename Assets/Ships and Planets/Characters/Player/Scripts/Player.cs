@@ -107,32 +107,34 @@ public class Player : MonoBehaviour
 
     public void ActivateConditionOnEnemy()
     {
-        print("enemy condition activated");
+        print("enemy condition activated"); // TODO implement this
     }
 
     public IEnumerator CountDownTimeBetweenHits()
     {
-        reloadProgressImage.fillAmount = 0;
-        canAttack = false;
-        while (timeBetweenHits > Mathf.Epsilon)
+        reloadProgressImage.fillAmount = 0; // Reset the progress
+        canAttack = false; // Player can't attack
+        while (timeBetweenHits > Mathf.Epsilon) // Start counting down time between hits
         {
-            reloadProgressImage.gameObject.SetActive(true);
-            timeBetweenHits -= Time.deltaTime;
-            reloadProgressImage.fillAmount += Time.deltaTime;
+            reloadProgressImage.gameObject.SetActive(true); // Activate the reload progress image
+            timeBetweenHits -= Time.deltaTime; // Countdown time
+            reloadProgressImage.fillAmount += Time.deltaTime; // Fill up the progress image by a little bit
 
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame(); // Exit out of the loop
         }
-        if (currentBullets >= 1)
-            canAttack = true;
-        reloadProgressImage.gameObject.SetActive(false);
-        timeBetweenHits = originalTimeForHits;
+        if (currentBullets >= 1) // If the player stll has bullets
+        {
+            canAttack = true; // Allow the player to attack
+        }
+        reloadProgressImage.gameObject.SetActive(false); // Deactivate the progress image
+        timeBetweenHits = originalTimeForHits; // Reset the time between hits counter
     }
 
     void HandleLowHighJump()
     {
         if (rb.velocity.y < 0) // When the player starts falling
         {
-            rb.gravityScale = fallMultiplier;
+            rb.gravityScale = fallMultiplier; // Start the player falling
         }
         else if (rb.velocity.y > 0 && !Input.GetButton("Jump")) // If the player is in the middle of jumping
         {
@@ -194,7 +196,13 @@ public class Player : MonoBehaviour
             GameObject bullet = Instantiate(bulletPrefab, gunEnd.position, Quaternion.identity); // Instantiate a bullet
             Rigidbody2D projectileRigidbody = bullet.GetComponent<Rigidbody2D>(); // Get the bullet's Rigidbody
             bullet.transform.localRotation = new Quaternion(Quaternion.identity.x, Quaternion.identity.y, j, Quaternion.identity.w);
-            bullet.transform.localScale = new Vector2(-localScaleValues.x * .5f, localScaleValues.x * .7f);
+            if (transform.localScale.x < 0)
+            {
+                bullet.transform.localScale = new Vector2(localScaleValues.x * .5f, localScaleValues.x * .7f);
+            } else if (transform.localScale.x > 0)
+            {
+                bullet.transform.localScale = new Vector2(-localScaleValues.x * .5f, localScaleValues.x * .7f);
+            }
 
             // Check for which direction the player's facing and fire the bullets accordingly
             if (transform.localScale.x < 0 && bulletSpeed < 0)
@@ -202,6 +210,7 @@ public class Player : MonoBehaviour
             else if (transform.localScale.x > 0 && bulletSpeed > 0)
                 bulletSpeed *= -1;
         }
+        audioSource.PlayOneShot(gunSounds[Random.Range(0, gunSounds.Length)]);
         currentBullets--;
         if (currentBullets < 1)
             canAttack = false;

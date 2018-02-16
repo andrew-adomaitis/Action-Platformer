@@ -6,11 +6,11 @@ public class OneWayPlatform : MonoBehaviour
     [SerializeField] string playerString = "Player";
     [SerializeField] float waitToResetTriggerLength = .5f;
 
-    BoxCollider2D boxCollider;
+    Collider2D boxCollider;
 
     void Awake()
     {
-        boxCollider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<Collider2D>();
     }
 
     IEnumerator ResetIsTrigger()

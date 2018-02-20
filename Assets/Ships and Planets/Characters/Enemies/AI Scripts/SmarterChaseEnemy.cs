@@ -9,23 +9,30 @@ public class SmarterChaseEnemy : MonoBehaviour
     [SerializeField] float backupRadius = 3;
     [SerializeField] float speed = 3;
     [SerializeField] float chargeSpeed = 6;
+
+    [Space]
+    [Tooltip("How long to wait to stop charging")]
+    [SerializeField] float timeToResetCharge = 1f;
     [SerializeField] Transform wallCheck;
     [SerializeField] Transform playerChargeCheck;
 
-    enum State {backupRight, backupLeft, idle, chargeRight, chargeLeft, moveLeft, moveRight};
+    enum State {backingUp, idle, chargeRight, chargeLeft, moveLeft, moveRight};
     State state = State.idle;
 
+    float resetChargeTimer;
     float scaleX;
     float distanceToPlayer;
     bool wasShot = false;
     bool canChase = false;
     bool shouldCharge = false;
+    bool canSwitchState = true;
     Rigidbody2D rb;
     Transform player;
     BaseEnemy baseEnemy;
 
     void Awake()
     {
+        resetChargeTimer = timeToResetCharge;
         scaleX = transform.localScale.x;
         rb = GetComponent<Rigidbody2D>();
         baseEnemy = GetComponent<BaseEnemy>();
@@ -34,72 +41,88 @@ public class SmarterChaseEnemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (baseEnemy.hasBeenShot == true)
-        {
-            wasShot = true;
-        }
         distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        HandleState();
+
+        if (canSwitchState)
+        {
+            HandleState();
+        }
     }
 
     void HandleState()
     {
+        float playerSpeed = player.GetComponent<Player>().speed;
+        bool playerOutOfChaseRadius = (distanceToPlayer > chaseRadius && state != State.idle);
+        bool playerOnRight = (player.position.x > transform.position.x);
+        bool playerOutOfBackupRadius = (distanceToPlayer >= backupRadius);
+
         
-        if (distanceToPlayer > chaseRadius && state != State.idle) // If the player's out of the chase radius
+        if (playerOutOfChaseRadius && state != State.idle) // If the player's out of the chase radius
         {
             StopAllCoroutines();
             state = State.idle; // Do nothing
             rb.velocity = Vector2.zero;
         }
         // If the player's in between the backup radius and and the chase radius to the left
-        else if (distanceToPlayer <= chaseRadius && distanceToPlayer >= backupRadius && player.position.x <= transform.position.x && state != State.moveLeft)
+        else if (!playerOutOfChaseRadius && playerOutOfBackupRadius && !playerOnRight && state != State.moveLeft)
         {
             StopAllCoroutines();
             state = State.moveLeft; // move left
             StartCoroutine(ChasePlayer(-speed));
         }
-        // If the player's in between the backup radius and and the chase radius to the left
-        else if (distanceToPlayer <= chaseRadius && distanceToPlayer >= backupRadius && player.position.x > transform.position.x && state != State.moveRight)
+        // If the player's in between the backup radius and and the chase radius to the right
+        else if (!playerOutOfChaseRadius && playerOutOfBackupRadius && playerOnRight && state != State.moveRight)
         {
             StopAllCoroutines();
             state = State.moveRight; // move right
             StartCoroutine(ChasePlayer(speed));
         }
         // If the player is inside the backup radius and to the left
-        else if (distanceToPlayer <= backupRadius && player.position.x <= transform.position.x && state != State.backupRight)
+        else if (!playerOutOfBackupRadius && !playerOnRight && state != State.backingUp)
         {
             StopAllCoroutines();
-            state = State.backupRight; // Backup right
-            StartCoroutine(Backup(player.GetComponent<Player>().speed));
+            state = State.backingUp; // Backup right
+            StartCoroutine(Backup(playerSpeed));
         }
         // If the player's inside the backup radius and to the right
-        else if (distanceToPlayer <= backupRadius && player.position.x > transform.position.x && state != State.backupLeft)
+        else if (!playerOutOfBackupRadius && playerOnRight && state != State.backingUp)
         {
             StopAllCoroutines();
-            state = State.backupLeft; // Backup left
-            StartCoroutine(Backup(player.GetComponent<Player>().speed * -1));
+            state = State.backingUp; // Backup left
+            StartCoroutine(Backup(-playerSpeed));
         }
         // if we've been shot and the player's on the left
-        else if (wasShot == true && distanceToPlayer <= backupRadius && player.position.x <= transform.position.x && state != State.chargeLeft)
+        else if (baseEnemy.hasBeenShot && !playerOnRight && state != State.chargeLeft)
         {
+            resetChargeTimer = timeToResetCharge;
             StopAllCoroutines();
             state = State.chargeLeft;
             StartCoroutine(Charge(-chargeSpeed));
         }
         // if we've been shot and the player's on the right
-        else if (wasShot == true && distanceToPlayer <= backupRadius && player.position.x > transform.position.x && state != State.chargeRight)
+        else if (baseEnemy.hasBeenShot && playerOnRight && state != State.chargeRight)
         {
+            resetChargeTimer = timeToResetCharge;
             StopAllCoroutines();
             state = State.chargeRight;
             StartCoroutine(Charge(chargeSpeed));
         }
     }
 
+    IEnumerator ResetCharge()
+    {
+        yield return new WaitForEndOfFrame();
+        canSwitchState = false;
+        yield return new WaitForSecondsRealtime(timeToResetCharge);
+        wasShot = false;
+        canSwitchState = true;
+    }
+
     IEnumerator ChasePlayer(float speed)
     {
         while (distanceToPlayer <= chaseRadius)
         {
-            rb.velocity = Vector2.right * speed;
+            rb.velocity = new Vector2(speed, rb.velocity.y);
             yield return new WaitForEndOfFrame();
         }
     }
@@ -108,18 +131,21 @@ public class SmarterChaseEnemy : MonoBehaviour
     {
         while(distanceToPlayer <= backupRadius)
         {
-            rb.velocity = Vector2.right * speed;
+            rb.velocity = new Vector2(speed, rb.velocity.y);
             yield return new WaitForEndOfFrame();
         }
     }
 
     IEnumerator Charge(float speed)
     {
-        while (wasShot == true)
+        while (resetChargeTimer >= Mathf.Epsilon)
         {
-            rb.velocity = Vector2.right * speed;
+            canSwitchState = false;
+            rb.velocity = new Vector2(speed, rb.velocity.y);
+            resetChargeTimer -= Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+        canSwitchState = true;
     }
 
     void OnDrawGizmos()

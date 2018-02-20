@@ -6,12 +6,14 @@ public class Patroller : MonoBehaviour
     [SerializeField] Transform rightPoint;
     [SerializeField] float speed = 5f;
 
+    float scaleX;
     float positionSphereRadius = .2f;
     Rigidbody2D rigidBody;
     bool movingRight = false;
 
     void Start()
     {
+        scaleX = transform.localScale.x;
         rigidBody = GetComponent<Rigidbody2D>();
     }
 
@@ -28,10 +30,12 @@ public class Patroller : MonoBehaviour
 
         if (movingRight)
         {
+            transform.localScale = new Vector2(scaleX, transform.localScale.y);
             rigidBody.velocity = new Vector2(speed, rigidBody.velocity.y);
         }
         else
         {
+            transform.localScale = new Vector2(-scaleX, transform.localScale.y);
             rigidBody.velocity = new Vector2(-speed, rigidBody.velocity.y);
         }
     }

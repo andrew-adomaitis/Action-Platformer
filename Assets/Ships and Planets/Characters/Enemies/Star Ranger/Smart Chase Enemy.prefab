@@ -138,7 +138,7 @@ Transform:
   m_GameObject: {fileID: 1426994036224510}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.2, y: 2.2, z: 1}
   m_Children: []
   m_Father: {fileID: 4403422158292040}
   m_RootOrder: 0
@@ -177,7 +177,7 @@ Transform:
   m_GameObject: {fileID: 1515690424128390}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 35.77, y: -24.87, z: 0}
-  m_LocalScale: {x: 2.2, y: 2.2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4135508363294552}
   - {fileID: 224805791378149414}
@@ -282,7 +282,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.01596032, y: -0.12551117}
+  m_Offset: {x: 0.009471893, y: -0.29097843}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -293,7 +293,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.37352172, y: 0.79382396}
+  m_Size: {x: 0.7369003, y: 1.6308918}
   m_EdgeRadius: 0
 --- !u!95 &95126174540249678
 Animator:
@@ -325,9 +325,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaseRadius: 10
-  backupRadius: 3
+  backupRadius: 5
   speed: 3
-  chargeSpeed: 20
+  chargeSpeed: 12
   timeToResetCharge: 1
   wallCheck: {fileID: 4381206749547884}
   playerChargeCheck: {fileID: 4623274863180778}
@@ -373,7 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efd43c79b19e40d40a64f2478771dd55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 100
+  maxHP: 150
   healthText: {fileID: 114520018276110654}
   isKnockedBack: 0
   knockbackCounter: 0
@@ -399,7 +399,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 8b3dfb7f0ef75d04a8189056c3fd7963, type: 3}
-    m_FontSize: 10
+    m_FontSize: 15
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -518,7 +518,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.00000029057, y: 0.137}
+  m_AnchoredPosition: {x: -0.00000029057, y: 0.525}
   m_SizeDelta: {x: 102.781, y: 31.48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224805791378149414

@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class SmarterChaseEnemy : MonoBehaviour
 {
+    [SerializeField] Transform objectToMove;
     [Tooltip("How far to move toward the player")]
     [SerializeField] float chaseRadius = 10;
+    [SerializeField] float bufferZone = 7;
     [Tooltip("When to start backing up from the player")]
     [SerializeField] float backupRadius = 3;
     [SerializeField] float speed = 3;
@@ -26,6 +28,7 @@ public class SmarterChaseEnemy : MonoBehaviour
     bool canChase = false;
     bool shouldCharge = false;
     bool canSwitchState = true;
+    bool playerOnRight;
     Rigidbody2D rb;
     Transform player;
     BaseEnemy baseEnemy;
@@ -33,10 +36,15 @@ public class SmarterChaseEnemy : MonoBehaviour
     void Awake()
     {
         resetChargeTimer = timeToResetCharge;
-        scaleX = transform.localScale.x;
+        scaleX = objectToMove.localScale.x;
         rb = GetComponent<Rigidbody2D>();
         baseEnemy = GetComponent<BaseEnemy>();
         player = FindObjectOfType<Player>().gameObject.transform;
+    }
+
+    void Update()
+    {
+        HandleScaling();
     }
 
     void FixedUpdate()
@@ -53,11 +61,18 @@ public class SmarterChaseEnemy : MonoBehaviour
     {
         float playerSpeed = player.GetComponent<Player>().speed;
         bool playerOutOfChaseRadius = (distanceToPlayer > chaseRadius && state != State.idle);
-        bool playerOnRight = (player.position.x > transform.position.x);
+        playerOnRight = (player.position.x > transform.position.x);
         bool playerOutOfBackupRadius = (distanceToPlayer >= backupRadius);
-
+        bool playerOutOfBufferZone = (distanceToPlayer >= bufferZone);
         
         if (playerOutOfChaseRadius && state != State.idle) // If the player's out of the chase radius
+        {
+            StopAllCoroutines();
+            state = State.idle; // Do nothing
+            rb.velocity = Vector2.zero;
+        }
+        // If the player's between the buffer zone and the chase radius
+        else if (playerOutOfBufferZone && !playerOutOfChaseRadius && state != State.idle)
         {
             StopAllCoroutines();
             state = State.idle; // Do nothing
@@ -109,6 +124,18 @@ public class SmarterChaseEnemy : MonoBehaviour
         }
     }
 
+    void HandleScaling()
+    {
+        if (playerOnRight)
+        {
+            objectToMove.localScale = new Vector2(scaleX, objectToMove.localScale.y);
+        }
+        else if (!playerOnRight)
+        {
+            objectToMove.localScale = new Vector2(-scaleX, objectToMove.localScale.y);
+        }
+    }
+
     IEnumerator ResetCharge()
     {
         yield return new WaitForEndOfFrame();
@@ -152,6 +179,8 @@ public class SmarterChaseEnemy : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, chaseRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, bufferZone);
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, backupRadius);
     }

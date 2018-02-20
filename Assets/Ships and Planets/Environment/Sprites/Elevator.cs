@@ -2,15 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Elevator : MonoBehaviour {
+[RequireComponent(typeof(Rigidbody2D))]
+public class Elevator : MonoBehaviour
+{
+    [SerializeField] Transform topPoint;
+    [SerializeField] Transform bottomPoint;
+    [SerializeField] float speed = 5;
+    [SerializeField] float stoppingDistance = 1;
+    [SerializeField] float waitTime = 5;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    Rigidbody2D rb;
+    bool isStopping = false;
+    bool canPatrol = true;
+    bool isGoingUp = true;
+
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    void FixedUpdate()
+    {
+        float distanceToTopPoint = Vector2.Distance(transform.position, topPoint.position);
+        float distanceToBottomPoint = Vector2.Distance(transform.position, bottomPoint.position);
+
+        if (canPatrol)
+        {
+            if (isGoingUp && distanceToTopPoint > stoppingDistance)
+            {
+                rb.velocity = Vector2.up * speed;
+            }
+            else if (!isGoingUp && distanceToBottomPoint > stoppingDistance)
+            {
+
+            }
+        }
+    }
+
+    IEnumerator waitAtStoppingPoint()
+    {
+        isStopping = true;
+        yield return new WaitForSecondsRealtime(waitTime);
+        isStopping = false;
+    }
 }

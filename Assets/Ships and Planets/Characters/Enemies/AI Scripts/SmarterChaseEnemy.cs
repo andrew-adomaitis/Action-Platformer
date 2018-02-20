@@ -18,6 +18,8 @@ public class SmarterChaseEnemy : MonoBehaviour
     [SerializeField] Transform wallCheck;
     [SerializeField] Transform playerChargeCheck;
 
+    const string IS_CHARGING_BOOL = "IsCharging";
+
     enum State {backingUp, idle, chargeRight, chargeLeft, moveLeft, moveRight};
     State state = State.idle;
 
@@ -32,11 +34,13 @@ public class SmarterChaseEnemy : MonoBehaviour
     Rigidbody2D rb;
     Transform player;
     BaseEnemy baseEnemy;
+    Animator anim;
 
     void Awake()
     {
         resetChargeTimer = timeToResetCharge;
         scaleX = objectToMove.localScale.x;
+        anim = objectToMove.GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         baseEnemy = GetComponent<BaseEnemy>();
         player = FindObjectOfType<Player>().gameObject.transform;
@@ -167,12 +171,14 @@ public class SmarterChaseEnemy : MonoBehaviour
     {
         while (resetChargeTimer >= Mathf.Epsilon)
         {
+            anim.SetBool(IS_CHARGING_BOOL, true);
             canSwitchState = false;
             rb.velocity = new Vector2(speed, rb.velocity.y);
             resetChargeTimer -= Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
         canSwitchState = true;
+        anim.SetBool(IS_CHARGING_BOOL, false);
     }
 
     void OnDrawGizmos()

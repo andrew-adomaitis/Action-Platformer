@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -15,6 +14,10 @@ public class Elevator : MonoBehaviour
     bool isStopping = false;
     bool canPatrol = true;
     bool isGoingUp = true;
+    bool isPatrolling = false;
+    float distanceToTopPoint;
+    float distanceToBottomPoint;
+    Transform target;
 
     void Awake()
     {
@@ -23,26 +26,59 @@ public class Elevator : MonoBehaviour
 
     void FixedUpdate()
     {
-        float distanceToTopPoint = Vector2.Distance(transform.position, topPoint.position);
-        float distanceToBottomPoint = Vector2.Distance(transform.position, bottomPoint.position);
+        distanceToTopPoint = Vector2.Distance(transform.position, topPoint.position);
+        distanceToBottomPoint = Vector2.Distance(transform.position, bottomPoint.position);
 
-        if (canPatrol)
+        if (canPatrol && !isPatrolling)
         {
-            if (isGoingUp && distanceToTopPoint > stoppingDistance)
-            {
-                rb.velocity = Vector2.up * speed;
-            }
-            else if (!isGoingUp && distanceToBottomPoint > stoppingDistance)
-            {
-
-            }
+            StartCoroutine(PatrolUp());
         }
     }
 
-    IEnumerator waitAtStoppingPoint()
+    IEnumerator PatrolUp()
+    {
+        isPatrolling = true;
+        isGoingUp = true;
+        while (distanceToTopPoint > stoppingDistance)
+        {
+            rb.velocity = Vector2.up * speed;
+            yield return new WaitForEndOfFrame();
+        }
+        rb.velocity = Vector2.zero;
+        yield return new WaitForSecondsRealtime(waitTime);
+        yield return StartCoroutine(PatrolDown());
+    }
+
+    IEnumerator PatrolDown()
+    {
+        isPatrolling = true;
+        isGoingUp = false;
+        while (distanceToBottomPoint > stoppingDistance)
+        {
+            rb.velocity = Vector2.down * speed;
+            yield return new WaitForEndOfFrame();
+        }
+        rb.velocity = Vector2.zero;
+        yield return new WaitForSecondsRealtime(waitTime);
+        yield return StartCoroutine(PatrolUp());
+    }
+
+
+    IEnumerator WaitAtStoppingPoint()
     {
         isStopping = true;
         yield return new WaitForSecondsRealtime(waitTime);
+        if (isGoingUp)
+        {
+            isGoingUp = false;
+            StartCoroutine(PatrolDown());
+        }
+        else
+        {
+            isGoingUp = true;
+            StartCoroutine(PatrolUp());
+        }
         isStopping = false;
+        isPatrolling = false;
     }
 }

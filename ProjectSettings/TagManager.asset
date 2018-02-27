@@ -9,6 +9,8 @@ TagManager:
   - Weapon
   - Enemy
   - Projectile
+  - EnemyHB
+  - PlayerHB
   layers:
   - Default
   - TransparentFX

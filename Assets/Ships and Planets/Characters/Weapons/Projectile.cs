@@ -2,8 +2,12 @@
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] string enemyTag;
-    [SerializeField] float destroyDelay = 1f;
+    [SerializeField] string enemyTag = "Enemy";
+    [SerializeField] string playerTag = "Player";
+    [SerializeField] string groundTag = "Ground";
+    [SerializeField] string deathParticles;
+
+    [HideInInspector] public float speed = 0;
 
     Player player;
     Rigidbody2D rb;
@@ -18,7 +22,7 @@ public class Projectile : MonoBehaviour
 
     void Update()
     {
-        rb.AddRelativeForce(new Vector2(player.bulletSpeed, 0), ForceMode2D.Impulse);
+        rb.AddRelativeForce(new Vector2(speed, 0), ForceMode2D.Impulse);
     }
 
     void OnBecameInvisible()
@@ -28,13 +32,18 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == enemyTag)
+        if (other.tag == groundTag)
         {
-            HealthSystem enemyHealthSystem = other.gameObject.GetComponent<HealthSystem>();
+            print("Triggered with ground");
+            Destroy(gameObject);
+        }
+        if (other.tag == enemyTag || other.tag == playerTag)
+        {
+            HealthSystem otherHS = other.gameObject.GetComponent<HealthSystem>();
 
-            if(enemyHealthSystem != null)
+            if(otherHS != null)
             {
-                enemyHealthSystem.TakeDamage(player.damage);
+                otherHS.TakeDamage(player.damage);
                 Destroy(gameObject);
             }
 

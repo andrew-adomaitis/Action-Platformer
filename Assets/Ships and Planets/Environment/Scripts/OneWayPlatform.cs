@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class OneWayPlatform : MonoBehaviour
 {
-    [SerializeField] string playerString = "Player";
+    [SerializeField] string playerTag = "Player";
     [SerializeField] float waitToResetTriggerLength = .5f;
 
     Collider2D boxCollider;
@@ -19,9 +19,18 @@ public class OneWayPlatform : MonoBehaviour
         boxCollider.isTrigger = false;
     }
 
-    void OnCollisionStay2D(Collision2D collision)
+    void OnCollisionStay2D(Collision2D other)
     {
-        if(Input.GetAxisRaw("Vertical") < 0)
+        if (Input.GetAxisRaw("Vertical") < 0 && other.collider.tag == playerTag)
+        {
+            boxCollider.isTrigger = true;
+            StartCoroutine(ResetIsTrigger());
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if (Input.GetAxisRaw("Vertical") < 0 && other.collider.tag == playerTag)
         {
             boxCollider.isTrigger = true;
             StartCoroutine(ResetIsTrigger());

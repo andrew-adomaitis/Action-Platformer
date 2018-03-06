@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: MainRoom Background tiles_1
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 21300002, guid: 50ba2b65568097c4585e43407683bb5d, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.23137257, g: 0.22352943, b: 0.23137257, a: 0.5803922}
   m_Transform:
     e00: 1
     e01: 0

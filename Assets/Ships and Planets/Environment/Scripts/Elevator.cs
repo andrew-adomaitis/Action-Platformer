@@ -11,7 +11,6 @@ public class Elevator : MonoBehaviour
     [SerializeField] float waitTime = 5;
 
     Rigidbody2D rb;
-    bool isStopping = false;
     bool canPatrol = true;
     bool isGoingUp = true;
     bool isPatrolling = false;
@@ -66,7 +65,6 @@ public class Elevator : MonoBehaviour
 
     IEnumerator WaitAtStoppingPoint()
     {
-        isStopping = true;
         yield return new WaitForSecondsRealtime(waitTime);
         if (isGoingUp)
         {
@@ -78,7 +76,6 @@ public class Elevator : MonoBehaviour
             isGoingUp = true;
             StartCoroutine(PatrolUp());
         }
-        isStopping = false;
         isPatrolling = false;
     }
 }

@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Levels/Tutorial.unity
+    path: Assets/Levels/MainMenu.unity
+    guid: 761f37afaedcc8d458a509b27caad450
+  - enabled: 1
+    path: Assets/Ships and Planets/Levels/Tutorial.unity
     guid: 2ceb8fcb13dd3014db225203860ab52a
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   m_configObjects: {}

@@ -11,37 +11,57 @@ public class Turret : MonoBehaviour
     [SerializeField] Transform gunEnd;
 
     bool canFire = false;
-    BaseEnemy baseEnemy;
+    bool isReloading = false;
     Transform player;
     
     void Awake()
     {
         player = FindObjectOfType<Player>().transform;
-        baseEnemy = GetComponent<BaseEnemy>();
     }
 
     void Update()
     {
+        GameObject bullet;
+        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         FaceTarget(player);
+
+        if (canFire && !isReloading)
+        {
+            bullet = Instantiate(bulletPrefab, gunEnd.position, gunEnd.rotation);
+            bullet.GetComponent<Projectile>().speed = -bulletSpeed;
+            StartCoroutine(CountDownTimeBetweenHits(reloadTime));
+        }
+
+        if(distanceToPlayer >= shootRadius)
+        {
+            canFire = false;
+        }
+        else if (distanceToPlayer < shootRadius && !isReloading)
+        {
+            canFire = true;
+        }
     }
 
     IEnumerator CountDownTimeBetweenHits(float timeToWait)
     {
-        yield return null;
+        isReloading = true;
+        canFire = false;
+        yield return new WaitForSeconds(timeToWait);
+        isReloading = false;
     }
 
     void FaceTarget(Transform target)
     {
-        Vector3 diff = target.position - turretShooter.position;
+        Vector3 diff = target.position - turretShooter.position; // Find the target's position
         diff.Normalize();
 
-        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-        turretShooter.rotation = Quaternion.Euler(0f, 0f, rot_z - 180);
+        float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg; // Find out the target's position relative to the player
+        turretShooter.rotation = Quaternion.Euler(0f, 0f, rot_z - 180); // Rotate toward the player
     }
 
     void OnDrawGizmos()
     {
-        // Draw the 
+        // Draw the gun end sphere
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, shootRadius);
 

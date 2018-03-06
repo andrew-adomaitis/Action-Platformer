@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-// TODO find a way to check if all bullets have hit a single enemy. Try an array on the enemy?
+
 [RequireComponent(typeof(Rigidbody2D), typeof(HealthSystem), typeof(AudioSource))]
 public class Player : MonoBehaviour
 {
@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
     [SerializeField] Transform groundCheck;
     [Tooltip("How far to check for the ground")]
     [SerializeField] float groundCheckRadius = .2f;
-    [SerializeField] bool isGrounded = true;
+    public bool isGrounded = true;
     [SerializeField] LayerMask groundLayer;
 
     [Header("Attacking")]
@@ -53,8 +53,7 @@ public class Player : MonoBehaviour
     const string GROUNDED_BOOLEAN = "Grounded";
     const string SPEED_FLOAT = "Speed";
     const string ATTACK_TRIGGER = "Attack";
-
-    Collider2D playerCollider;
+    
     Animator anim;
     Rigidbody2D rb;
     GameController gameController;
@@ -62,7 +61,6 @@ public class Player : MonoBehaviour
     HealthSystem healthSystem;
     BaseEnemy enemy;
     CameraShake cameraShake;
-    CameraRig mainCameraScript;
     Vector2 localScaleValues;
     AudioSource audioSource;
 
@@ -194,8 +192,8 @@ public class Player : MonoBehaviour
         for (float j = -bulletSpreadAngle; j < bulletSpreadAngle; j += bulletSpreadAngle / numOfBullets * 2)
         {
             GameObject bullet = Instantiate(bulletPrefab, gunEnd.position, Quaternion.identity); // Instantiate a bullet
-            Rigidbody2D projectileRigidbody = bullet.GetComponent<Rigidbody2D>(); // Get the bullet's Rigidbody
             bullet.transform.localRotation = new Quaternion(Quaternion.identity.x, Quaternion.identity.y, j, Quaternion.identity.w);
+            bullet.GetComponent<Projectile>().speed = bulletSpeed;
             if (transform.localScale.x < 0)
             {
                 bullet.transform.localScale = new Vector2(localScaleValues.x * .5f, localScaleValues.x * .7f);
@@ -221,13 +219,11 @@ public class Player : MonoBehaviour
     void FindComponents()
     {
         audioSource = GetComponent<AudioSource>();
-        mainCameraScript = FindObjectOfType<CameraRig>();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         gameController = FindObjectOfType<GameController>();
         healthSystem = GetComponent<HealthSystem>();
         cameraShake = gameController.gameObject.GetComponent<CameraShake>();
-        playerCollider = GetComponent<Collider2D>();
     }
 
     
@@ -268,14 +264,6 @@ public class Player : MonoBehaviour
             enemy = other.gameObject.GetComponent<BaseEnemy>(); // Find the enemy
             healthSystem.TakeDamage(enemy.damage); // Damage the player
             cameraShake.Shake(hurtCamShakeIntensity, hurtCamShakeLength, shakeFrequency); // Shake the camera
-        }
-    }
-
-    void OnBecameInvisible()
-    {
-        if (transform.position.y > mainCameraScript.transform.position.y)
-        {
-            //mainCameraScript.ResetXPos();
         }
     }
 }

@@ -7,15 +7,11 @@ public class GameController : MonoBehaviour
         
     Player player;
     HealthSystem playerHealthSystem;
-    ResetOnRespawn[] objectsToReset;
-    CameraRig cameraRig;
 
     void Start()
     {
         player = FindObjectOfType<Player>();
-        objectsToReset = FindObjectsOfType<ResetOnRespawn>();
         playerHealthSystem = player.gameObject.GetComponent<HealthSystem>();
-        cameraRig = FindObjectOfType<CameraRig>();
     }
 
     void Update()

@@ -26,9 +26,6 @@ public class SmarterChaseEnemy : MonoBehaviour
     float resetChargeTimer;
     float scaleX;
     float distanceToPlayer;
-    bool wasShot = false;
-    bool canChase = false;
-    bool shouldCharge = false;
     bool canSwitchState = true;
     bool playerOnRight;
     Rigidbody2D rb;
@@ -87,7 +84,7 @@ public class SmarterChaseEnemy : MonoBehaviour
         {
             StopAllCoroutines();
             state = State.moveLeft; // move left
-            StartCoroutine(ChasePlayer(-speed));
+            StartCoroutine(Backup(-speed));
         }
         // If the player's in between the backup radius and and the chase radius to the right
         else if (!playerOutOfChaseRadius && playerOutOfBackupRadius && playerOnRight && state != State.moveRight)
@@ -145,7 +142,6 @@ public class SmarterChaseEnemy : MonoBehaviour
         yield return new WaitForEndOfFrame();
         canSwitchState = false;
         yield return new WaitForSecondsRealtime(timeToResetCharge);
-        wasShot = false;
         canSwitchState = true;
     }
 

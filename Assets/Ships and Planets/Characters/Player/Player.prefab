@@ -22,8 +22,9 @@ GameObject:
   - component: {fileID: 50633283266616568}
   - component: {fileID: 212459664105535994}
   - component: {fileID: 95140539715253442}
-  - component: {fileID: 60530955803140668}
   - component: {fileID: 82070373967647138}
+  - component: {fileID: 61546483377126696}
+  - component: {fileID: 58780320923294988}
   - component: {fileID: 114997559688196840}
   - component: {fileID: 114218924969960656}
   m_Layer: 10
@@ -120,7 +121,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1685642801614860}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.527, y: -0.14, z: 0}
+  m_LocalPosition: {x: 1.042, y: -0.14, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4847727025069532}
@@ -147,7 +148,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1393470570252450}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.3289304, y: -2.6776333, z: 0}
+  m_LocalPosition: {x: -6.64, y: -2.81, z: 0}
   m_LocalScale: {x: 1.7, y: 1.7, z: 1}
   m_Children:
   - {fileID: 4933693522681606}
@@ -189,8 +190,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!60 &60530955803140668
-PolygonCollider2D:
+--- !u!58 &58780320923294988
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1393470570252450}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.6173223}
+  serializedVersion: 2
+  m_Radius: 0.022677533
+--- !u!61 &61546483377126696
+BoxCollider2D:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
@@ -201,7 +217,7 @@ PolygonCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.020007968, y: -0.17035171}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -211,14 +227,9 @@ PolygonCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: 0.16446638, y: 0.28532022}
-      - {x: -0.12201977, y: 0.2853201}
-      - {x: -0.12475538, y: -0.6228735}
-      - {x: -0.02772212, y: -0.63755333}
-      - {x: 0.01933837, y: -0.6389535}
-      - {x: 0.15666223, y: -0.6198246}
+  serializedVersion: 2
+  m_Size: {x: 0.29559827, y: 0.90841335}
+  m_EdgeRadius: 0
 --- !u!82 &82070373967647138
 AudioSource:
   m_ObjectHideFlags: 1
@@ -449,7 +460,7 @@ MonoBehaviour:
   bulletHolder: {fileID: 1941647691081834}
   bulletPrefab: {fileID: 1034356174668414, guid: 532ce51bba1e9ff428e63410dc9ff781,
     type: 2}
-  bulletSpreadAngle: 45
+  bulletSpreadAngle: 25
   damage: 10
   numOfBullets: 5
   gunEnd: {fileID: 4418523972492144}

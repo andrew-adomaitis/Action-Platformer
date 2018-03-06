@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(Rigidbody2D))]
 public class HealthSystem : MonoBehaviour
 {
 
@@ -15,7 +15,6 @@ public class HealthSystem : MonoBehaviour
     GameController gameController;
     Player player;
     CameraShake cameraShake;
-    Rigidbody2D rigidBody;
 
     public float HealthAsPercentage { get { return currentHP / maxHP; } }
     
@@ -26,7 +25,6 @@ public class HealthSystem : MonoBehaviour
         gameController = FindObjectOfType<GameController>();
         player = GetComponent<Player>();
         cameraShake = gameController.gameObject.GetComponent<CameraShake>();
-        rigidBody = GetComponent<Rigidbody2D>();
     }
 
     public void TakeDamage(float damage)
@@ -39,7 +37,7 @@ public class HealthSystem : MonoBehaviour
         {
             if(gameObject.tag == "Player")
             {
-                gameController.Respawn();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
             }
             Kill();
         }

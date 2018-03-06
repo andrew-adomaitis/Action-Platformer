@@ -7,12 +7,10 @@ public class ChasePlayerInRadiusFly : MonoBehaviour
     float scaleX;
     bool canChase = false;
     Player target;
-    Rigidbody2D rb;
     
     void Start()
     {
         scaleX = transform.localScale.x;
-        rb = GetComponent<Rigidbody2D>();
         target = FindObjectOfType<Player>();
     }
 
